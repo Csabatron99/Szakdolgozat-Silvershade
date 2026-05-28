@@ -1,0 +1,14 @@
+{
+  "name": "silvershade",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SilverShade dev orchestrator — starts API, Website, DiscordBot and FivemDummy.",
+  "scripts": {
+    "start":          "python start.py",
+    "start:no-fivem": "python start.py --no-fivem",
+    "start:core":     "python start.py api website discordbot"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

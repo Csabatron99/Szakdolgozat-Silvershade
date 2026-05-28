@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% set page = "auth" %}
+{% set title = "Authentication | SilverShade" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="glass-card p-4 p-lg-5">
+      <h2 class="mb-4">Login or Create Account</h2>
+      <div id="authAlert" class="alert d-none" role="alert"></div>
+
+      <ul class="nav nav-pills mb-4" id="auth-tab">
+        <li class="nav-item">
+          <button class="nav-link active" id="login-tab" data-bs-toggle="pill" data-bs-target="#login-pane" type="button">Login</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="register-tab" data-bs-toggle="pill" data-bs-target="#register-pane" type="button">Register</button>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="login-pane">
+          <form id="loginForm" class="row g-3">
+            <div class="col-12">
+              <label class="form-label" for="loginEmail">Email</label>
+              <input class="form-control form-control-lg" id="loginEmail" name="email" type="email" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="loginPassword">Password</label>
+              <input class="form-control form-control-lg" id="loginPassword" name="password" type="password" minlength="8" required>
+            </div>
+            <div class="col-12">
+              <button class="btn btn-silver w-100 btn-lg" type="submit">Login</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="tab-pane fade" id="register-pane">
+          <form id="registerForm" class="row g-3">
+            <div class="col-12">
+              <label class="form-label" for="registerEmail">Email</label>
+              <input class="form-control form-control-lg" id="registerEmail" name="email" type="email" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="registerPassword">Password</label>
+              <input class="form-control form-control-lg" id="registerPassword" name="password" type="password" minlength="8" required>
+            </div>
+            <div class="col-12">
+              <button class="btn btn-outline-light w-100 btn-lg" type="submit">Create Account</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

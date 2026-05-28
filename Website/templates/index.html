@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+{% set page = "index" %}
+{% set title = "SilverShade — FiveM Roleplay Server" %}
+{% block content %}
+
+<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+<section class="hero-section">
+  <div class="container hero-content text-center">
+    <p class="overline mb-2">Premium FiveM Roleplay</p>
+    <h1 class="display-4 fw-bold mb-2">
+      Welcome to <span class="text-silver">SilverShade</span>
+    </h1>
+    <p class="lead text-light-subtle mb-4 mx-auto" style="max-width:560px;">
+      An immersive roleplay experience on FiveM. Craft your story, build your legacy, and join a thriving community.
+    </p>
+    <div class="d-flex flex-wrap gap-3 justify-content-center mb-4">
+      <a class="btn btn-silver btn-lg px-4" href="/auth"><i class="bi bi-person-fill me-2"></i>Join Now</a>
+      <a class="btn btn-outline-light btn-lg px-4" href="/store"><i class="bi bi-bag-fill me-2"></i>Visit Store</a>
+    </div>
+
+    <!-- Server status inline widget -->
+    <div class="d-flex flex-wrap justify-content-center gap-3 mb-3">
+      <div class="hero-stat-badge" id="heroStatPlayers">
+        <span class="hero-stat-dot" id="heroStatusDot"></span>
+        <span id="heroPlayerCount">— / 64</span>
+        <span class="hero-stat-label">Players</span>
+      </div>
+      <div class="hero-stat-badge">
+        <i class="bi bi-people-fill text-silver me-1"></i>
+        <span id="heroDiscordCount">2,500+</span>
+        <span class="hero-stat-label">Discord</span>
+      </div>
+      <div class="hero-stat-badge">
+        <i class="bi bi-clock-fill text-silver me-1"></i>
+        <span>24/7</span>
+        <span class="hero-stat-label">Uptime</span>
+      </div>
+      <div class="hero-stat-badge">
+        <i class="bi bi-star-fill text-silver me-1"></i>
+        <span>Season 2</span>
+        <span class="hero-stat-label">Active</span>
+      </div>
+    </div>
+
+    <!-- Connect command copy badge -->
+    <div class="hero-connect-strip mt-2">
+      <code class="text-silver small">connect play.silvershade.gg</code>
+      <button class="btn btn-link btn-sm text-muted p-0 ms-2"
+              onclick="navigator.clipboard.writeText('connect play.silvershade.gg');this.innerHTML='<i class=\'bi bi-check2\'></i>'"
+              title="Copy to clipboard">
+        <i class="bi bi-clipboard"></i>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ WHY US ═══════════════════════════════ -->
+<section class="container py-5" id="features">
+  <div class="text-center mb-4">
+    <p class="overline">What We Offer</p>
+    <h2 class="fw-bold">Why SilverShade?</h2>
+  </div>
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="feature-card p-4 h-100">
+        <i class="bi bi-people-fill feature-icon mb-3"></i>
+        <h5>Active Community</h5>
+        <p class="text-muted mb-0">A welcoming community of roleplayers. 2,500+ members on Discord with active staff around the clock.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="feature-card p-4 h-100">
+        <i class="bi bi-controller feature-icon mb-3"></i>
+        <h5>Custom Scripts</h5>
+        <p class="text-muted mb-0">Unique jobs, vehicles, housing, and economy systems built exclusively for SilverShade.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="feature-card p-4 h-100">
+        <i class="bi bi-shield-check-fill feature-icon mb-3"></i>
+        <h5>Anti-Cheat Protected</h5>
+        <p class="text-muted mb-0">Advanced moderation tools keep the server fair and enjoyable for everyone.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="feature-card p-4 h-100">
+        <i class="bi bi-cash-coin feature-icon mb-3"></i>
+        <h5>Dynamic Economy</h5>
+        <p class="text-muted mb-0">Player-driven market, legal and illegal jobs, business ownership, and a balanced economy system.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="feature-card p-4 h-100">
+        <i class="bi bi-discord feature-icon mb-3"></i>
+        <h5>Discord Integration</h5>
+        <p class="text-muted mb-0">Manage your account, check your balance, and get support directly from Discord.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="feature-card p-4 h-100">
+        <i class="bi bi-arrow-repeat feature-icon mb-3"></i>
+        <h5>Regular Updates</h5>
+        <p class="text-muted mb-0">Weekly content drops, events, heist nights, and seasonal updates keep the world alive.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ FACTIONS ═══════════════════════════════ -->
+<section class="container pb-5" id="factions">
+  <div class="text-center mb-4">
+    <p class="overline">Choose Your Path</p>
+    <h2 class="fw-bold">Factions & Roles</h2>
+    <p class="text-muted">Every faction runs with structured systems, real hierarchy, and dedicated roleplay arcs.</p>
+  </div>
+  <div class="row g-3">
+    <div class="col-md-4 col-lg-2">
+      <div class="faction-card text-center p-3 h-100">
+        <div class="faction-icon mb-2" style="color:#3b82f6"><i class="bi bi-shield-fill fs-2"></i></div>
+        <h6 class="mb-1">LSPD</h6>
+        <p class="text-muted small mb-2">Law enforcement, patrols, investigations.</p>
+        <span class="badge bg-success">Recruiting</span>
+      </div>
+    </div>
+    <div class="col-md-4 col-lg-2">
+      <div class="faction-card text-center p-3 h-100">
+        <div class="faction-icon mb-2" style="color:#ef4444"><i class="bi bi-heart-pulse-fill fs-2"></i></div>
+        <h6 class="mb-1">EMS</h6>
+        <p class="text-muted small mb-2">Emergency medical services and trauma RP.</p>
+        <span class="badge bg-success">Recruiting</span>
+      </div>
+    </div>
+    <div class="col-md-4 col-lg-2">
+      <div class="faction-card text-center p-3 h-100">
+        <div class="faction-icon mb-2" style="color:#f59e0b"><i class="bi bi-building-fill fs-2"></i></div>
+        <h6 class="mb-1">Government</h6>
+        <p class="text-muted small mb-2">Politics, permits, laws, and city management.</p>
+        <span class="badge bg-warning text-dark">Limited</span>
+      </div>
+    </div>
+    <div class="col-md-4 col-lg-2">
+      <div class="faction-card text-center p-3 h-100">
+        <div class="faction-icon mb-2" style="color:#22c55e"><i class="bi bi-wrench-adjustable fs-2"></i></div>
+        <h6 class="mb-1">Mechanic</h6>
+        <p class="text-muted small mb-2">Repairs, tuning, and vehicle RP.</p>
+        <span class="badge bg-success">Recruiting</span>
+      </div>
+    </div>
+    <div class="col-md-4 col-lg-2">
+      <div class="faction-card text-center p-3 h-100">
+        <div class="faction-icon mb-2" style="color:#a855f7"><i class="bi bi-slash-circle-fill fs-2"></i></div>
+        <h6 class="mb-1">Illegal Orgs</h6>
+        <p class="text-muted small mb-2">Organised crime, hierarchy, territory control.</p>
+        <span class="badge bg-danger">Apply</span>
+      </div>
+    </div>
+    <div class="col-md-4 col-lg-2">
+      <div class="faction-card text-center p-3 h-100">
+        <div class="faction-icon mb-2" style="color:#c0c0c0"><i class="bi bi-plus-circle-fill fs-2"></i></div>
+        <h6 class="mb-1">Custom</h6>
+        <p class="text-muted small mb-2">Pitch your own faction concept to the team.</p>
+        <span class="badge bg-secondary">Open</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ HOW TO JOIN ═══════════════════════════════ -->
+<section class="container pb-5" id="join">
+  <div class="text-center mb-4">
+    <p class="overline">Get Started</p>
+    <h2 class="fw-bold">How to Join</h2>
+  </div>
+  <div class="join-steps-row row g-4 justify-content-center">
+    <div class="col-md-4">
+      <div class="join-step-card text-center p-4">
+        <div class="join-step-number">1</div>
+        <i class="bi bi-discord fs-1 mb-3 d-block" style="color:#5865f2"></i>
+        <h5>Join Our Discord</h5>
+        <p class="text-muted small mb-3">All announcements, rules, and community life start on Discord. Hit the invite link below.</p>
+        <a href="#discord" class="btn btn-outline-light btn-sm"><i class="bi bi-discord me-1"></i>Go to Discord</a>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="join-step-card text-center p-4">
+        <div class="join-step-number">2</div>
+        <i class="bi bi-person-plus-fill fs-1 mb-3 d-block text-silver"></i>
+        <h5>Create an Account</h5>
+        <p class="text-muted small mb-3">Register on this site — link your Discord for seamless account management and balance tracking.</p>
+        <a href="/auth" class="btn btn-silver btn-sm">Register Now</a>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="join-step-card text-center p-4">
+        <div class="join-step-number">3</div>
+        <i class="bi bi-controller fs-1 mb-3 d-block" style="color:#22c55e"></i>
+        <h5>Connect &amp; Play</h5>
+        <p class="text-muted small mb-3">Open FiveM, press <kbd>F8</kbd> and connect. Your story starts the moment you spawn in.</p>
+        <button class="btn btn-outline-success btn-sm" onclick="navigator.clipboard.writeText('connect play.silvershade.gg');this.textContent='Copied!'">
+          <i class="bi bi-clipboard me-1"></i>Copy Connect Command
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ GALLERY ═══════════════════════════════ -->
+<section class="container pb-5" id="gallery">
+  <div class="text-center mb-4">
+    <p class="overline">Showcase</p>
+    <h2 class="fw-bold">In-Game Gallery</h2>
+    <p class="text-muted">A glimpse into life on SilverShade.</p>
+  </div>
+  <div class="gallery-grid">
+    <!-- Placeholder tiles — replace src values with real screenshots -->
+    <div class="gallery-tile"><div class="gallery-placeholder"><i class="bi bi-camera-fill"></i><span>Screenshot</span></div></div>
+    <div class="gallery-tile gallery-tile--wide"><div class="gallery-placeholder"><i class="bi bi-camera-fill"></i><span>Feature Showcase</span></div></div>
+    <div class="gallery-tile"><div class="gallery-placeholder"><i class="bi bi-camera-fill"></i><span>Faction RP</span></div></div>
+    <div class="gallery-tile"><div class="gallery-placeholder"><i class="bi bi-camera-fill"></i><span>Car Meet</span></div></div>
+    <div class="gallery-tile gallery-tile--wide"><div class="gallery-placeholder"><i class="bi bi-camera-fill"></i><span>Police Chase</span></div></div>
+    <div class="gallery-tile"><div class="gallery-placeholder"><i class="bi bi-camera-fill"></i><span>Night Scene</span></div></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ DISCORD CTA ═══════════════════════════════ -->
+<section class="container pb-5" id="discord">
+  <div class="discord-cta p-4 p-lg-5">
+    <div class="row align-items-center gy-4">
+      <div class="col-lg-7 text-center text-lg-start">
+        <i class="bi bi-discord display-4 mb-3 d-block d-lg-none" style="color:#5865f2"></i>
+        <h3 class="fw-bold mb-2">Join our Discord Community</h3>
+        <p class="text-muted mb-3">Get real-time support, participate in events, read the rules, and stay updated on every server announcement.</p>
+        <ul class="list-unstyled text-muted small mb-4 mb-lg-0">
+          <li><i class="bi bi-check2-circle text-success me-2"></i>24/7 support via tickets</li>
+          <li><i class="bi bi-check2-circle text-success me-2"></i>Exclusive update announcements</li>
+          <li><i class="bi bi-check2-circle text-success me-2"></i>Community events and giveaways</li>
+          <li><i class="bi bi-check2-circle text-success me-2"></i>Direct contact with the admin team</li>
+        </ul>
+      </div>
+      <div class="col-lg-5 text-center">
+        <i class="bi bi-discord d-none d-lg-block display-3 mb-3" style="color:#5865f2"></i>
+        <a href="#" target="_blank" rel="noopener" class="btn btn-discord btn-lg px-5">
+          <i class="bi bi-discord me-2"></i>Join Discord
+        </a>
+        <p class="text-muted small mt-2 mb-0">2,500+ members and growing</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

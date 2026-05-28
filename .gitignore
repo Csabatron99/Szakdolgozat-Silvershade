@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+**/__pycache__/
+*.pyc
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Environment files (never commit real secrets)
+.env
+*.env
+!*.env.example
+
+# Logs
+logs/
+*.log
+api.log
+app.log
+server.log
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+*.swp
+
+# Workspace/local metadata
+*.code-workspace
+.copilot-memory/
+**/copilot-memory/
+
+# Non-program documentation and thesis artifacts
+*.doc
+*.docx
+*.pdf
+*.txt
+*.md
+!README.md
+!**/README.md
+
+# Thesis-only helper scripts (keep local)
+generate_thesis.py

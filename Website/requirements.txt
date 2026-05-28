@@ -1,0 +1,7 @@
+# Frontend server only — no database or auth dependencies needed here.
+# All backend logic lives in API/requirements.txt
+fastapi==0.118.0
+uvicorn[standard]==0.36.0
+jinja2==3.1.6
+httpx==0.28.1
+pydantic-settings==2.10.1

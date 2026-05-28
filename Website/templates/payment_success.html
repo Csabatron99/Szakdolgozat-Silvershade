@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% set page = "payment_success" %}
+{% set title = "Payment Confirmed | SilverShade" %}
+{% block content %}
+<div class="container">
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5 text-center py-5">
+    <div id="statusIcon" class="mb-4">
+      <div class="spinner-border text-light" role="status" style="width:3.5rem;height:3.5rem;"></div>
+    </div>
+    <h2 id="statusTitle" class="fw-bold mb-2">Confirming Payment…</h2>
+    <p id="statusText" class="text-light-subtle mb-4">Please wait while we verify your payment with Stripe.</p>
+
+    <div id="paymentDetails" class="glass-card p-3 mb-4 d-none text-start">
+      <p class="mb-1 small text-muted">Session ID</p>
+      <p id="sessionIdText" class="font-monospace small text-truncate mb-0"></p>
+    </div>
+
+    <div id="statusActions" class="d-none">
+      <a href="/store" class="btn btn-silver me-2">
+        <i class="bi bi-bag-fill me-1"></i>Back to Store
+      </a>
+      <a href="/dashboard" class="btn btn-outline-light">
+        <i class="bi bi-speedometer2 me-1"></i>My Account
+      </a>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+(async function () {
+  const params = new URLSearchParams(window.location.search);
+  const sessionId = params.get("session_id");
+
+  if (!sessionId) {
+    document.getElementById("statusIcon").innerHTML = '<i class="bi bi-question-circle text-warning" style="font-size:4rem;"></i>';
+    document.getElementById("statusTitle").textContent = "No session found";
+    document.getElementById("statusText").textContent = "Return to the store and try again.";
+    document.getElementById("statusActions").classList.remove("d-none");
+    return;
+  }
+
+  document.getElementById("sessionIdText").textContent = sessionId;
+  document.getElementById("paymentDetails").classList.remove("d-none");
+
+  const MAX_ATTEMPTS = 12;
+  const POLL_INTERVAL = 2500;
+
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    try {
+      const resp = await fetch(`/api/v1/payments/${encodeURIComponent(sessionId)}/status`, {
+        credentials: "same-origin",
+      });
+      if (!resp.ok) throw new Error("Status check failed");
+      const data = await resp.json();
+      const status = data.data?.status || data.status;
+      const paymentStatus = data.data?.paymentStatus || data.paymentStatus;
+
+      if (status === "complete" && paymentStatus === "paid") {
+        document.getElementById("statusIcon").innerHTML = '<i class="bi bi-check-circle-fill text-success" style="font-size:4rem;"></i>';
+        document.getElementById("statusTitle").textContent = "Payment Confirmed!";
+        document.getElementById("statusText").textContent = "Your purchase is confirmed. Your reward is on its way to your FiveM account.";
+        document.getElementById("statusActions").classList.remove("d-none");
+        return;
+      }
+
+      if (status === "expired") {
+        document.getElementById("statusIcon").innerHTML = '<i class="bi bi-x-circle-fill text-danger" style="font-size:4rem;"></i>';
+        document.getElementById("statusTitle").textContent = "Session Expired";
+        document.getElementById("statusText").textContent = "The checkout session expired before payment was completed.";
+        document.getElementById("statusActions").classList.remove("d-none");
+        return;
+      }
+    } catch {
+      /* retry */
+    }
+    await new Promise((r) => setTimeout(r, POLL_INTERVAL));
+  }
+
+  // Timed out — likely webhook not running
+  document.getElementById("statusIcon").innerHTML = '<i class="bi bi-clock-history text-warning" style="font-size:4rem;"></i>';
+  document.getElementById("statusTitle").textContent = "Payment Pending";
+  document.getElementById("statusText").textContent = "Your payment was received but confirmation is still processing. Check your transaction history shortly.";
+  document.getElementById("statusActions").classList.remove("d-none");
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% set page = "dashboard" %}
+{% set title = "My Account | SilverShade" %}
+{% block content %}
+<div class="container py-4 py-lg-5">
+<div id="dashboardAlert" class="alert d-none" role="alert"></div>
+
+<!-- Profile header -->
+<div class="d-flex align-items-center gap-3 mb-4">
+  <div class="avatar-circle"><i class="bi bi-person-fill fs-4"></i></div>
+  <div>
+    <h4 class="mb-0 fw-bold" id="profileEmail">Loading…</h4>
+    <span id="profileRoleBadge" class="badge bg-silver-subtle text-silver small mt-1">—</span>
+  </div>
+  <a href="/store" class="btn btn-silver btn-sm ms-auto"><i class="bi bi-bag-fill me-1"></i>Visit Store</a>
+</div>
+
+<!-- Stats row -->
+<section class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="metric-card p-3 h-100">
+      <h6>Current Balance</h6>
+      <h3 id="balanceValue" class="mb-0">$0.00</h3>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="metric-card p-3 h-100">
+      <h6>Role</h6>
+      <h3 id="roleValue" class="mb-0">-</h3>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="metric-card p-3 h-100">
+      <h6>Account Status</h6>
+      <h3 class="mb-0 text-success">Active</h3>
+    </div>
+  </div>
+</section>
+
+<!-- Transactions -->
+<section class="glass-card p-3 mb-4">
+  <h5 class="mb-3"><i class="bi bi-receipt me-2"></i>My Transactions</h5>
+  <div class="table-responsive">
+    <table class="table table-dark table-striped align-middle mb-0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="transactionsTable"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Linked Accounts -->
+<section class="glass-card p-3 mb-4">
+  <div class="d-flex align-items-center gap-2 mb-1">
+    <h5 class="mb-0"><i class="bi bi-link-45deg me-2"></i>Linked Accounts</h5>
+  </div>
+  <p class="mb-3" style="color:#9a9aaa;font-size:0.875rem;">Connect your Discord and FiveM identities so server staff can verify and reward you across all platforms.</p>
+
+  <form id="linkedAccountsForm">
+    <!-- Discord connection card -->
+    <div class="linked-account-row discord-row p-3 rounded-3 mb-3">
+      <div class="d-flex align-items-start gap-3">
+        <div class="linked-account-icon discord-icon flex-shrink-0">
+          <i class="bi bi-discord fs-3"></i>
+        </div>
+        <div class="flex-grow-1">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="fw-bold" style="color:#e8e8f0;font-size:1rem;">Discord</span>
+            <span id="discordStatusBadge" class="badge rounded-pill" style="font-size:0.7rem;">—</span>
+          </div>
+          <input type="text" id="discordIdInput"
+            class="form-control form-control-sm mb-2"
+            placeholder="Paste your Discord User ID here…" maxlength="64">
+          <div class="linked-how-to p-2 rounded-2">
+            <span style="color:#a0a0b8;font-size:0.78rem;">
+              <i class="bi bi-info-circle me-1" style="color:#7289da;"></i>
+              <strong style="color:#c8c8e0;">How to find it:</strong>
+              Open Discord → Settings → <strong style="color:#c8c8e0;">Advanced</strong> → turn on <strong style="color:#c8c8e0;">Developer Mode</strong>.
+              Then right-click your username anywhere and choose <strong style="color:#c8c8e0;">Copy User ID</strong>.
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FiveM connection card -->
+    <div class="linked-account-row fivem-row p-3 rounded-3 mb-3">
+      <div class="d-flex align-items-start gap-3">
+        <div class="linked-account-icon fivem-icon flex-shrink-0">
+          <i class="bi bi-controller fs-3"></i>
+        </div>
+        <div class="flex-grow-1">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="fw-bold" style="color:#e8e8f0;font-size:1rem;">FiveM</span>
+            <span id="fivemStatusBadge" class="badge rounded-pill" style="font-size:0.7rem;">—</span>
+          </div>
+          <input type="text" id="fivemIdInput"
+            class="form-control form-control-sm mb-2"
+            placeholder="e.g. steam:1100001abcdef01 or license:…" maxlength="64">
+          <div class="linked-how-to p-2 rounded-2">
+            <span style="color:#a0a0b8;font-size:0.78rem;">
+              <i class="bi bi-info-circle me-1" style="color:#f59e0b;"></i>
+              <strong style="color:#c8c8e0;">How to find it:</strong>
+              Join the server in-game and type <code style="background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:4px;color:#ffd580;">/myid</code> in chat.
+              Copy the <strong style="color:#c8c8e0;">steam:</strong> or <strong style="color:#c8c8e0;">license:</strong> identifier that appears.
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+      <button type="submit" class="btn btn-silver btn-sm px-4"><i class="bi bi-save me-1"></i>Save Connections</button>
+      <span id="linkedAccountsMsg" class="small d-none"></span>
+    </div>
+  </form>
+</section>
+
+<!-- Profile settings -->
+<section class="row g-3">
+  <div class="col-lg-6">
+    <div class="glass-card p-3">
+      <h5 class="mb-3"><i class="bi bi-key me-2"></i>Change Password</h5>
+      <form id="changePasswordForm" class="row g-2">
+        <div class="col-12">
+          <input type="password" id="currentPassword" class="form-control bg-dark text-light border-secondary" placeholder="Current password" required>
+        </div>
+        <div class="col-12">
+          <input type="password" id="newPassword" class="form-control bg-dark text-light border-secondary" placeholder="New password (min 8 chars)" minlength="8" required>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-silver w-100">Update Password</button>
+        </div>
+        <div id="passwordMsg" class="col-12 d-none small mt-1"></div>
+      </form>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="glass-card p-3">
+      <h5 class="mb-3 text-danger"><i class="bi bi-trash me-2"></i>Delete Account</h5>
+      <p class="text-light-subtle small mb-3">This action is permanent. Your account will be deactivated and you will be logged out immediately.</p>
+      <button id="deleteAccountBtn" class="btn btn-outline-danger w-100" type="button">Delete My Account</button>
+    </div>
+  </div>
+</section>
+</div>
+{% endblock %}

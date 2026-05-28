@@ -1,0 +1,779 @@
+{% extends "base.html" %}
+{% set page = "admin" %}
+{% set title = "Admin Dashboard | SilverShade" %}
+{% block content %}
+<div id="adminAlert" class="alert d-none" role="alert"></div>
+
+<section class="row g-3 admin-layout">
+  <div class="col-lg-3">
+    <aside class="glass-card p-3 sticky-top admin-sidebar">
+      <h5 class="mb-3"><i class="bi bi-grid-1x2-fill me-2"></i>Control Menu</h5>
+      <!-- PANEL NAV -->
+      <div class="accordion accordion-flush silver-accordion" id="adminSections">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#menuDiscord" aria-expanded="true" aria-controls="menuDiscord">
+              <i class="bi bi-discord me-2"></i>Discord
+            </button>
+          </h2>
+          <div id="menuDiscord" class="accordion-collapse collapse show" data-bs-parent="#adminSections">
+            <div class="accordion-body p-0">
+              <div class="list-group list-group-flush bg-transparent">
+                <a class="list-group-item list-group-item-action bg-transparent text-light" href="#" data-panel="discord-queue">Bot Queue</a>
+                <a class="list-group-item list-group-item-action bg-transparent text-light" href="#" data-panel="discord-moderation">Moderation Feed</a>
+                <a class="list-group-item list-group-item-action bg-transparent text-light" href="#" data-panel="discord-rolesync">Role Sync</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#menuFivem" aria-expanded="false" aria-controls="menuFivem">
+              <i class="bi bi-controller me-2"></i>FiveM
+            </button>
+          </h2>
+          <div id="menuFivem" class="accordion-collapse collapse" data-bs-parent="#adminSections">
+            <div class="accordion-body p-0">
+              <div class="list-group list-group-flush bg-transparent">
+                <a class="list-group-item list-group-item-action bg-transparent text-light" href="#" data-panel="fivem-rewards">Pending Rewards</a>
+                <a class="list-group-item list-group-item-action bg-transparent text-light" href="#" data-panel="fivem-actions">Admin Actions</a>
+                <a class="list-group-item list-group-item-action bg-transparent text-light" href="#" data-panel="fivem-players">Online Players</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#menuWeb" aria-expanded="false" aria-controls="menuWeb">
+              <i class="bi bi-window-stack me-2"></i>Web
+            </button>
+          </h2>
+          <div id="menuWeb" class="accordion-collapse collapse" data-bs-parent="#adminSections">
+            <div class="accordion-body p-0">
+              <div class="list-group list-group-flush bg-transparent">
+                <a class="list-group-item list-group-item-action bg-transparent text-light" href="#" data-panel="web-users">Users</a>
+                <a class="list-group-item list-group-item-action bg-transparent text-light" href="#" data-panel="web-transactions">Transactions</a>
+                <a class="list-group-item list-group-item-action bg-transparent text-light" href="#" data-panel="web-creator">Action Creator</a>
+                <a class="list-group-item list-group-item-action bg-transparent text-light" href="#" data-panel="web-store">Store Items</a>
+                <a class="list-group-item list-group-item-action bg-transparent text-light" href="#" data-panel="web-topup-packages">Top-up Packages</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="col-lg-9">
+
+    <!-- Always-visible stat strip -->
+    <div class="row g-3 mb-3">
+      <div class="col-md-4">
+        <div class="metric-card p-3 h-100">
+          <h6>Total Users</h6>
+          <h3 id="statUsers" class="mb-0">0</h3>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="metric-card p-3 h-100">
+          <h6>Pending Transactions</h6>
+          <h3 id="statPendingTx" class="mb-0">0</h3>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="metric-card p-3 h-100">
+          <h6>Completed Transactions</h6>
+          <h3 id="statCompletedTx" class="mb-0">0</h3>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="metric-card p-3 h-100">
+          <h6>Pending Admin Actions</h6>
+          <h3 id="statPendingActions" class="mb-0">0</h3>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="metric-card p-3 h-100">
+          <h6>Store Items</h6>
+          <h3 id="statStoreItems" class="mb-0">0</h3>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="metric-card p-3 h-100">
+          <h6>Last Sync Snapshot</h6>
+          <h3 id="statSyncTime" class="mb-0 fs-6">Waiting</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PANEL: FiveM Pending Rewards ===================== -->
+    <div data-admin-panel="fivem-rewards" class="admin-panel">
+      <div class="row g-3 mb-3">
+        <div class="col-xl-6">
+          <div class="glass-card p-3 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h5 class="mb-0">Operations Overview</h5>
+                <small class="text-light-subtle">Live queue and sync status</small>
+              </div>
+              <button id="refreshOperationsBtn" class="btn btn-outline-light btn-sm" type="button">Refresh</button>
+            </div>
+            <div class="operations-grid">
+              <div class="ops-tile">
+                <span>FiveM Reward Queue</span>
+                <strong id="opsPendingTransactions">0</strong>
+              </div>
+              <div class="ops-tile">
+                <span>FiveM Admin Queue</span>
+                <strong id="opsPendingAdminActions">0</strong>
+              </div>
+              <div class="ops-tile">
+                <span>Completed Actions</span>
+                <strong id="opsCompletedActions">0</strong>
+              </div>
+              <div class="ops-tile">
+                <span>Completed Purchases</span>
+                <strong id="opsCompletedTransactions">0</strong>
+              </div>
+            </div>
+            <div class="status-line mt-3">
+              <span class="status-dot"></span>
+              <span id="operationsStatusText">Dashboard ready for sync testing.</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6">
+          <div class="glass-card p-3 h-100">
+            <h5 class="mb-3">Integration Endpoints</h5>
+            <div id="endpointCards" class="endpoint-list"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="glass-card p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="mb-0">Pending Reward Queue</h5>
+              <button id="simulateFivemRewardsBtn" class="btn btn-silver btn-sm" type="button">
+                <i class="bi bi-play-circle me-1"></i>Simulate FiveM Pickup
+              </button>
+            </div>
+            <div class="table-responsive admin-mini-table">
+              <table class="table table-dark table-striped align-middle mb-0">
+                <thead>
+                  <tr><th>User ID</th><th>Amount</th><th>Item</th><th>Status</th></tr>
+                </thead>
+                <tbody id="pendingTransactionsTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PANEL: FiveM Admin Actions ===================== -->
+    <div data-admin-panel="fivem-actions" class="admin-panel d-none">
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="glass-card p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h5 class="mb-0">Pending Admin Actions</h5>
+                <small class="text-light-subtle">Server-side bans, kicks, and role commands queued for execution</small>
+              </div>
+              <button id="simulateFivemActionsBtn" class="btn btn-outline-warning btn-sm" type="button">
+                <i class="bi bi-play-circle me-1"></i>Simulate FiveM Action Pickup
+              </button>
+            </div>
+            <div class="table-responsive admin-mini-table">
+              <table class="table table-dark table-striped align-middle mb-0">
+                <thead>
+                  <tr><th>Type</th><th>Player</th><th>Data</th><th>Status</th></tr>
+                </thead>
+                <tbody id="pendingAdminActionsTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PANEL: FiveM Online Players ===================== -->
+    <div data-admin-panel="fivem-players" class="admin-panel d-none">
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="glass-card p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h5 class="mb-0">Online Players</h5>
+                <small id="fivemPlayersUpdatedAt" class="text-light-subtle">Last update: —</small>
+              </div>
+              <span id="fivemPlayerCount" class="badge bg-success fs-6">0 online</span>
+            </div>
+            <div id="fivemPlayersTableWrap">
+              <table class="table table-dark table-hover align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Money</th>
+                    <th>Roles</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="fivemPlayersTbody">
+                  <tr><td colspan="5" class="text-center text-light-subtle py-4">Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PANEL: Discord Bot Queue ===================== -->
+    <div data-admin-panel="discord-queue" class="admin-panel d-none">
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="glass-card p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h5 class="mb-0">Discord Bot Queue</h5>
+                <small class="text-light-subtle">Admin actions waiting for Discord bot pickup (bans, kicks, role changes)</small>
+              </div>
+              <button id="simulateDiscordPickupBtn" class="btn btn-outline-primary btn-sm" type="button">
+                <i class="bi bi-discord me-1"></i>Simulate Discord Pickup
+              </button>
+            </div>
+            <div class="table-responsive admin-mini-table">
+              <table class="table table-dark table-striped align-middle mb-0">
+                <thead>
+                  <tr><th>Type</th><th>Player ID</th><th>Data</th><th>Status</th></tr>
+                </thead>
+                <tbody id="discordQueueTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PANEL: Discord Moderation Feed ===================== -->
+    <div data-admin-panel="discord-moderation" class="admin-panel d-none">
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="glass-card p-3">
+            <h5 class="mb-3">Moderation Feed</h5>
+            <div class="table-responsive">
+              <table class="table table-dark table-striped align-middle">
+                <thead>
+                  <tr><th>Type</th><th>Player</th><th>Status</th><th>Date</th></tr>
+                </thead>
+                <tbody id="adminHistoryTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PANEL: Discord Role Sync ===================== -->
+    <div data-admin-panel="discord-rolesync" class="admin-panel d-none">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="glass-card p-3">
+            <h5 class="mb-3"><i class="bi bi-arrow-repeat me-2"></i>Role Sync Info</h5>
+            <p class="text-light-subtle mb-3">The Discord bot polls the sync endpoint to receive queued admin actions (bans, kicks, role changes). Once processed, it calls the confirm endpoint to mark them completed.</p>
+            <div class="endpoint-card mb-2">
+              <h6 class="mb-1">Poll Endpoint</h6>
+              <code>GET /api/sync/updates</code>
+            </div>
+            <div class="endpoint-card">
+              <h6 class="mb-1">Confirm Endpoint</h6>
+              <code>POST /api/confirm-admin-action</code>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="glass-card p-3">
+            <h5 class="mb-3"><i class="bi bi-key me-2"></i>Auth</h5>
+            <p class="text-light-subtle mb-2">All service-to-service calls use the <code>SERVICE_API_KEY</code> as a bearer token:</p>
+            <div class="endpoint-card mb-3">
+              <code>Authorization: Bearer &lt;SERVICE_API_KEY&gt;</code>
+            </div>
+            <p class="text-light-subtle mb-0">Set <code>SILVERSHADE_API</code> in your bot's <code>.env</code> to <code>http://127.0.0.1:8000</code> — no <code>/api</code> suffix.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PANEL: Web Users ===================== -->
+    <div data-admin-panel="web-users" class="admin-panel d-none">
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="glass-card p-3">
+            <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <h5 class="mb-0">Users</h5>
+                <div id="usersBulkBar" class="d-none d-flex gap-2">
+                  <button class="btn btn-outline-danger btn-sm" onclick="bulkBanUsers()"><i class="bi bi-ban me-1"></i>Bulk Ban</button>
+                  <button class="btn btn-outline-secondary btn-sm" onclick="bulkDeleteUsers()"><i class="bi bi-trash me-1"></i>Bulk Delete</button>
+                  <span id="bulkSelCount" class="badge bg-secondary align-self-center">0 selected</span>
+                </div>
+              </div>
+              <div class="d-flex gap-2 flex-wrap">
+                <div class="input-group input-group-sm" style="max-width:240px">
+                  <input id="userSearchInput" type="text" class="form-control bg-dark text-light border-secondary" placeholder="Search by email…">
+                  <button id="userSearchBtn" class="btn btn-outline-secondary" type="button"><i class="bi bi-search"></i></button>
+                </div>
+                <select id="usersLimitSelect" class="form-select form-select-sm bg-dark text-light border-secondary" style="width:auto" onchange="loadUsers()">
+                  <option value="25">25 / page</option>
+                  <option value="50">50 / page</option>
+                  <option value="100">100 / page</option>
+                </select>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-dark table-hover align-middle mb-0 admin-table">
+                <thead>
+                  <tr>
+                    <th style="width:36px"><input type="checkbox" id="userSelectAll" class="form-check-input" title="Select all"></th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Balance</th>
+                    <th>Discord</th>
+                    <th>FiveM</th>
+                    <th>Status</th>
+                    <th>Joined</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTable"></tbody>
+              </table>
+            </div>
+            <div id="usersPagination" class="d-flex justify-content-end gap-2 mt-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Adjust Balance -->
+    <div class="modal fade" id="adjustBalanceModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content bg-dark text-light border-secondary">
+          <div class="modal-header border-secondary py-2">
+            <h6 class="modal-title mb-0">Adjust Balance</h6>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="adjustBalanceUserId">
+            <p class="small text-light-subtle mb-2" id="adjustBalanceEmail"></p>
+            <div class="input-group">
+              <span class="input-group-text bg-dark text-light border-secondary">$</span>
+              <input type="number" id="adjustBalanceAmount" step="0.01" class="form-control bg-dark text-light border-secondary" placeholder="e.g. 50 or -10">
+            </div>
+            <small class="text-muted">Positive = add, negative = deduct</small>
+          </div>
+          <div class="modal-footer border-secondary py-2">
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-silver btn-sm" onclick="applyBalanceAdjust()">Apply</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Change Role -->
+    <div class="modal fade" id="changeRoleModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content bg-dark text-light border-secondary">
+          <div class="modal-header border-secondary py-2">
+            <h6 class="modal-title mb-0">Change Role</h6>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="changeRoleUserId">
+            <p class="small text-light-subtle mb-2" id="changeRoleEmail"></p>
+            <select id="changeRoleSelect" class="form-select bg-dark text-light border-secondary">
+              <option value="user">user</option>
+              <option value="admin">admin</option>
+            </select>
+          </div>
+          <div class="modal-footer border-secondary py-2">
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-silver btn-sm" onclick="applyRoleChange()">Set Role</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PANEL: Web Transactions ===================== -->
+    <div data-admin-panel="web-transactions" class="admin-panel d-none">
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="glass-card p-3">
+            <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
+              <h5 class="mb-0">Transactions</h5>
+              <div class="d-flex gap-2 flex-wrap">
+                <select id="txStatusFilter" class="form-select form-select-sm bg-dark text-light border-secondary" style="width:auto" onchange="loadAdminTransactions()">
+                  <option value="">All Statuses</option>
+                  <option value="pending">Pending</option>
+                  <option value="completed">Completed</option>
+                  <option value="failed">Failed</option>
+                  <option value="refunded">Refunded</option>
+                </select>
+                <select id="txTypeFilter" class="form-select form-select-sm bg-dark text-light border-secondary" style="width:auto" onchange="loadAdminTransactions()">
+                  <option value="">All Types</option>
+                  <option value="topup">Top-up</option>
+                  <option value="purchase">Purchase</option>
+                  <option value="credit">Credit</option>
+                  <option value="debit">Debit</option>
+                </select>
+                <select id="txLimitSelect" class="form-select form-select-sm bg-dark text-light border-secondary" style="width:auto" onchange="loadAdminTransactions()">
+                  <option value="25">25 / page</option>
+                  <option value="50">50 / page</option>
+                  <option value="100">100 / page</option>
+                </select>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-dark table-hover align-middle mb-0 admin-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminTransactionsTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PANEL: Web Action Creator ===================== -->
+    <div data-admin-panel="web-creator" class="admin-panel d-none">
+      <div class="row g-3">
+        <!-- Creator tab nav -->
+        <div class="col-12">
+          <ul class="nav nav-pills gap-1" id="creatorTabs">
+            <li class="nav-item"><button class="nav-link active" data-creator-tab="web"><i class="bi bi-window me-1"></i>Web</button></li>
+            <li class="nav-item"><button class="nav-link" data-creator-tab="fivem"><i class="bi bi-controller me-1"></i>FiveM</button></li>
+            <li class="nav-item"><button class="nav-link" data-creator-tab="discord"><i class="bi bi-discord me-1"></i>Discord</button></li>
+            <li class="nav-item"><button class="nav-link" data-creator-tab="custom"><i class="bi bi-terminal me-1"></i>Custom / Store</button></li>
+          </ul>
+        </div>
+
+        <!-- WEB ACTIONS TAB -->
+        <div data-creator-panel="web" class="col-12 creator-tab-panel">
+          <div class="row g-3">
+            <div class="col-lg-5">
+              <div class="glass-card p-3 h-100">
+                <h6 class="mb-3"><i class="bi bi-lightning-charge me-2 text-warning"></i>Quick Actions</h6>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillWebAction('adjust_balance',{amount:100})"><i class="bi bi-cash me-2 text-success"></i>Adjust Balance</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillWebAction('change_role',{role:'vip'})"><i class="bi bi-shield me-2 text-info"></i>Change Role</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillWebAction('ban_user',{reason:'Rule violation'})"><i class="bi bi-ban me-2 text-danger"></i>Ban User</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillWebAction('unban_user',{})"><i class="bi bi-check-circle me-2 text-success"></i>Unban User</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillWebAction('grant_item',{itemId:''})"><i class="bi bi-box me-2 text-warning"></i>Grant Store Item</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillWebAction('reset_password',{notify:true})"><i class="bi bi-key me-2 text-secondary"></i>Reset Password</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-7">
+              <div class="glass-card p-3 h-100">
+                <h6 class="mb-3">Web Action</h6>
+                <form id="webActionForm" class="row g-2" onsubmit="submitCreatorAction(event,'web')">
+                  <div class="col-12">
+                    <label class="form-label small">Target User ID</label>
+                    <input class="form-control form-control-sm bg-dark text-light border-secondary" id="webActionPlayerId" placeholder="MongoDB ID or email" required>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label small">Action Type</label>
+                    <input class="form-control form-control-sm bg-dark text-light border-secondary font-monospace" id="webActionType" placeholder="e.g. adjust_balance" required>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label small">Custom Command <span class="text-muted">(optional)</span></label>
+                    <input class="form-control form-control-sm bg-dark text-light border-secondary font-monospace" id="webActionCustom" placeholder="override key">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small">Data (JSON)</label>
+                    <textarea class="form-control form-control-sm bg-dark text-light border-secondary font-monospace" id="webActionData" rows="3" placeholder='{"amount": 100}'></textarea>
+                  </div>
+                  <div class="col-12"><button class="btn btn-silver btn-sm w-100" type="submit">Queue Web Action</button></div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FIVEM ACTIONS TAB -->
+        <div data-creator-panel="fivem" class="col-12 creator-tab-panel d-none">
+          <div class="row g-3">
+            <div class="col-lg-5">
+              <div class="glass-card p-3 h-100">
+                <h6 class="mb-3"><i class="bi bi-controller me-2 text-warning"></i>FiveM Quick Actions</h6>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillFivemAction('give_money',{amount:1000})"><i class="bi bi-cash-coin me-2 text-success"></i>Give Money</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillFivemAction('give_item',{item:'weapon_pistol',count:1})"><i class="bi bi-box-seam me-2 text-info"></i>Give Item</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillFivemAction('ban',{reason:'Cheating',duration:'permanent'})"><i class="bi bi-ban me-2 text-danger"></i>Ban Player</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillFivemAction('kick',{reason:'AFK'})"><i class="bi bi-box-arrow-right me-2 text-warning"></i>Kick Player</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillFivemAction('teleport',{x:0,y:0,z:30})"><i class="bi bi-geo-alt me-2 text-primary"></i>Teleport</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillFivemAction('set_role',{role:'vip'})"><i class="bi bi-shield-fill me-2 text-secondary"></i>Set In-Game Role</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillFivemAction('revive',{})"><i class="bi bi-heart-pulse me-2 text-success"></i>Revive Player</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillFivemAction('spectate',{target:''})"><i class="bi bi-eye me-2 text-secondary"></i>Spectate Player</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-7">
+              <div class="glass-card p-3 h-100">
+                <h6 class="mb-3">FiveM Action</h6>
+                <form id="fivemActionForm" class="row g-2" onsubmit="submitCreatorAction(event,'fivem')">
+                  <div class="col-12">
+                    <label class="form-label small">FiveM Player ID / Identifier</label>
+                    <input class="form-control form-control-sm bg-dark text-light border-secondary" id="fivemActionPlayerId" placeholder="Player license or server ID" required>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label small">Action Type</label>
+                    <input class="form-control form-control-sm bg-dark text-light border-secondary font-monospace" id="fivemActionType" placeholder="e.g. give_money" required>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label small">Custom Server Command <span class="text-muted">(optional)</span></label>
+                    <input class="form-control form-control-sm bg-dark text-light border-secondary font-monospace" id="fivemActionCustom" placeholder="override command">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small">Data (JSON)</label>
+                    <textarea class="form-control form-control-sm bg-dark text-light border-secondary font-monospace" id="fivemActionData" rows="3" placeholder='{"amount": 1000}'></textarea>
+                  </div>
+                  <div class="col-12"><button class="btn btn-outline-warning btn-sm w-100" type="submit">Queue FiveM Action</button></div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DISCORD ACTIONS TAB -->
+        <div data-creator-panel="discord" class="col-12 creator-tab-panel d-none">
+          <div class="row g-3">
+            <div class="col-lg-5">
+              <div class="glass-card p-3 h-100">
+                <h6 class="mb-3"><i class="bi bi-discord me-2 text-info"></i>Discord Quick Actions</h6>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillDiscordAction('give_role',{role:'vip'})"><i class="bi bi-person-plus me-2 text-success"></i>Assign Role</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillDiscordAction('remove_role',{role:'vip'})"><i class="bi bi-person-dash me-2 text-warning"></i>Remove Role</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillDiscordAction('ban',{reason:'Rule violation'})"><i class="bi bi-ban me-2 text-danger"></i>Ban from Server</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillDiscordAction('kick',{reason:'Misconduct'})"><i class="bi bi-box-arrow-right me-2 text-warning"></i>Kick from Server</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillDiscordAction('mute',{duration:3600,reason:'Spam'})"><i class="bi bi-mic-mute me-2 text-secondary"></i>Timeout / Mute</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillDiscordAction('send_dm',{message:'Hello from admin'})"><i class="bi bi-envelope me-2 text-info"></i>Send DM</button>
+                  <button class="btn btn-outline-light btn-sm text-start" onclick="fillDiscordAction('nickname',{nick:'NewNick'})"><i class="bi bi-pencil me-2 text-secondary"></i>Change Nickname</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-7">
+              <div class="glass-card p-3 h-100">
+                <h6 class="mb-3">Discord Action</h6>
+                <form id="discordActionForm" class="row g-2" onsubmit="submitCreatorAction(event,'discord')">
+                  <div class="col-12">
+                    <label class="form-label small">Discord User ID (snowflake)</label>
+                    <input class="form-control form-control-sm bg-dark text-light border-secondary" id="discordActionPlayerId" placeholder="17–19 digit Discord ID" required>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label small">Action Type</label>
+                    <input class="form-control form-control-sm bg-dark text-light border-secondary font-monospace" id="discordActionType" placeholder="e.g. give_role" required>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label small">Custom Bot Command <span class="text-muted">(optional)</span></label>
+                    <input class="form-control form-control-sm bg-dark text-light border-secondary font-monospace" id="discordActionCustom" placeholder="!command override">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small">Data (JSON)</label>
+                    <textarea class="form-control form-control-sm bg-dark text-light border-secondary font-monospace" id="discordActionData" rows="3" placeholder='{"role": "vip"}'></textarea>
+                  </div>
+                  <div class="col-12"><button class="btn btn-outline-primary btn-sm w-100" type="submit">Queue Discord Action</button></div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CUSTOM / STORE TAB -->
+        <div data-creator-panel="custom" class="col-12 creator-tab-panel d-none">
+          <div class="row g-3">
+            <div class="col-lg-6">
+              <div class="glass-card p-3 h-100">
+                <h6 class="mb-3"><i class="bi bi-terminal me-2"></i>Custom Raw Action</h6>
+                <form id="adminActionForm" class="row g-2">
+                  <div class="col-6">
+                    <label class="form-label small">Type</label>
+                    <select class="form-select form-select-sm bg-dark text-light border-secondary" name="type" required>
+                      <option value="">— select —</option>
+                      <optgroup label="Moderation">
+                        <option value="ban">ban</option>
+                        <option value="kick">kick</option>
+                        <option value="mute">mute</option>
+                        <option value="unban">unban</option>
+                      </optgroup>
+                      <optgroup label="Economy">
+                        <option value="give_money">give_money</option>
+                        <option value="give_item">give_item</option>
+                        <option value="adjust_balance">adjust_balance</option>
+                      </optgroup>
+                      <optgroup label="Roles">
+                        <option value="give_role">give_role</option>
+                        <option value="remove_role">remove_role</option>
+                      </optgroup>
+                      <optgroup label="FiveM">
+                        <option value="teleport">teleport</option>
+                        <option value="revive">revive</option>
+                        <option value="set_role">set_role</option>
+                      </optgroup>
+                      <optgroup label="Discord">
+                        <option value="send_dm">send_dm</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label small">Player ID</label>
+                    <input class="form-control form-control-sm bg-dark text-light border-secondary" name="playerId" placeholder="MongoDB ID or snowflake" required>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small">Custom Command <span class="text-muted">(optional)</span></label>
+                    <input class="form-control form-control-sm bg-dark text-light border-secondary font-monospace" name="customCommand" placeholder="Override default command key">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small">Data (JSON) <span class="text-danger">*</span></label>
+                    <textarea class="form-control form-control-sm bg-dark text-light border-secondary font-monospace" name="data" rows="4" placeholder='{"reason":"rule break"}' required></textarea>
+                  </div>
+                  <div class="col-12"><button class="btn btn-outline-light btn-sm w-100" type="submit">Queue Custom Action</button></div>
+                </form>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="glass-card p-3 h-100">
+                <h6 class="mb-3"><i class="bi bi-shop me-2"></i>Create Store Item</h6>
+                <form id="storeItemForm" class="row g-2">
+                  <div class="col-12">
+                    <label class="form-label small">Item Name</label>
+                    <input class="form-control form-control-sm bg-dark text-light border-secondary" name="name" placeholder="e.g. VIP Pass" required>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label small">Price ($)</label>
+                    <input class="form-control form-control-sm bg-dark text-light border-secondary" name="price" type="number" min="0.01" step="0.01" placeholder="19.99" required>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label small">Category <span class="text-muted">(optional)</span></label>
+                    <input class="form-control form-control-sm bg-dark text-light border-secondary" name="category" placeholder="e.g. VIP, Weapons">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small">Reward Data (JSON) <span class="text-danger">*</span></label>
+                    <textarea class="form-control form-control-sm bg-dark text-light border-secondary font-monospace" name="rewardData" rows="3" placeholder='{"type":"money","amount":1000}' required></textarea>
+                  </div>
+                  <div class="col-12"><button class="btn btn-silver btn-sm w-100" type="submit">Create Item</button></div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== PANEL: Web Store Items ===================== -->
+    <div data-admin-panel="web-store" class="admin-panel d-none">
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="glass-card p-3">
+            <h5 class="mb-3">Store Items</h5>
+            <div class="table-responsive">
+              <table class="table table-dark table-striped align-middle">
+                <thead>
+                  <tr><th>Name</th><th>Price</th><th>Reward Data</th><th>Edit</th><th>Delete</th></tr>
+                </thead>
+                <tbody id="adminStoreTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Edit store item modal -->
+      <div class="modal fade" id="editStoreItemModal" tabindex="-1" aria-labelledby="editStoreItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content bg-dark text-light border-secondary">
+            <div class="modal-header border-secondary">
+              <h5 class="modal-title" id="editStoreItemModalLabel">Edit Store Item</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" id="editItemId">
+              <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" id="editItemName" class="form-control bg-dark text-light border-secondary">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Price</label>
+                <input type="number" id="editItemPrice" min="0.01" step="0.01" class="form-control bg-dark text-light border-secondary">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Reward Data (JSON)</label>
+                <textarea id="editItemRewardData" rows="3" class="form-control bg-dark text-light border-secondary"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer border-secondary">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" id="saveStoreItemBtn" class="btn btn-silver">Save Changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PANEL: Top-up Packages ===================== -->
+    <div data-admin-panel="web-topup-packages" class="admin-panel d-none">
+      <div class="row g-3">
+        <div class="col-lg-5">
+          <div class="glass-card p-3">
+            <h5 class="mb-3"><i class="bi bi-plus-circle me-2"></i>Create Package</h5>
+            <form id="topupPackageForm" class="row g-2">
+              <div class="col-12">
+                <input class="form-control" id="pkgName" placeholder="Package name (e.g. Starter Pack)" required>
+              </div>
+              <div class="col-12">
+                <div class="input-group">
+                  <span class="input-group-text bg-dark text-light border-secondary">$</span>
+                  <input class="form-control" id="pkgAmount" type="number" min="1" step="0.01" placeholder="10.00" required>
+                </div>
+              </div>
+              <div class="col-12">
+                <input class="form-control" id="pkgDescription" placeholder="Description (optional)">
+              </div>
+              <div class="col-12">
+                <button class="btn btn-silver w-100" type="submit">Create Package</button>
+              </div>
+              <div id="pkgFormMsg" class="col-12 d-none small mt-1"></div>
+            </form>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="glass-card p-3">
+            <h5 class="mb-3"><i class="bi bi-wallet2 me-2"></i>Existing Packages</h5>
+            <div class="table-responsive">
+              <table class="table table-dark table-striped align-middle mb-0">
+                <thead>
+                  <tr><th>Name</th><th>Amount</th><th>Description</th><th>Delete</th></tr>
+                </thead>
+                <tbody id="topupPackagesTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

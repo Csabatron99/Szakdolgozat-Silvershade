@@ -1,0 +1,762 @@
+:root {
+  --bg-main: #090909;
+  --bg-surface: #141414;
+  --bg-elevated: #1d1d1d;
+  --text-main: #f2f2f2;
+  --text-muted: #b9b9b9;
+  --silver: #c0c0c0;
+  --silver-strong: #d8d8d8;
+  --border-soft: rgba(192, 192, 192, 0.22);
+}
+
+body {
+  font-family: "Manrope", sans-serif;
+  background:
+    radial-gradient(circle at 12% 15%, rgba(255, 255, 255, 0.06), transparent 26%),
+    radial-gradient(circle at 85% 6%, rgba(255, 255, 255, 0.04), transparent 20%),
+    linear-gradient(145deg, #050505, #111111 40%, #090909 100%);
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+.brand-title,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.nav-link,
+.overline {
+  font-family: "Rajdhani", sans-serif;
+  letter-spacing: 0.03em;
+}
+
+.silver-nav {
+  border-bottom: 1px solid var(--border-soft);
+  backdrop-filter: blur(8px);
+  background: rgba(10, 10, 10, 0.92);
+}
+
+/* Force Bootstrap text utilities to use our readable dark-theme colours */
+.text-muted,
+.text-light-subtle {
+  color: var(--text-muted) !important;
+}
+
+/* Override Bootstrap's blue link colour everywhere except explicit btn/badge */
+a:not(.btn):not(.badge):not(.nav-link):not(.navbar-brand) {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+a:not(.btn):not(.badge):not(.nav-link):not(.navbar-brand):hover {
+  color: var(--silver);
+}
+
+.silver-nav .navbar-brand,
+.silver-nav .nav-link {
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.silver-nav .nav-link:hover {
+  color: #fff !important;
+}
+
+.silver-nav .btn {
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.silver-nav .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.glass-card,
+.hero-panel,
+.metric-card {
+  background: linear-gradient(180deg, rgba(32, 32, 32, 0.7), rgba(18, 18, 18, 0.9));
+  border: 1px solid var(--border-soft);
+  border-radius: 1rem;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+}
+
+.metric-card h6 {
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+}
+
+.btn-silver {
+  background: linear-gradient(120deg, #b5b5b5, #e0e0e0);
+  color: #111;
+  border: 0;
+}
+
+.btn-silver:hover {
+  background: linear-gradient(120deg, #d5d5d5, #f2f2f2);
+  color: #000;
+}
+
+.overline {
+  color: var(--silver);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.form-control,
+.form-select,
+textarea {
+  background-color: var(--bg-elevated) !important;
+  border: 1px solid #3f3f3f !important;
+  color: var(--text-main) !important;
+}
+
+.form-control:focus,
+.form-select:focus,
+textarea:focus {
+  border-color: var(--silver) !important;
+  box-shadow: 0 0 0 0.2rem rgba(192, 192, 192, 0.2) !important;
+}
+
+.table {
+  --bs-table-bg: transparent;
+}
+
+.admin-layout {
+  align-items: start;
+}
+
+.admin-sidebar {
+  top: 95px;
+}
+
+.silver-accordion .accordion-item,
+.silver-accordion .accordion-button,
+.silver-accordion .accordion-body {
+  background: transparent;
+  color: var(--text-main);
+  border: none;
+}
+
+.silver-accordion .accordion-button {
+  border-radius: 0.7rem !important;
+  margin-bottom: 0.35rem;
+  background: rgba(215, 215, 215, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(192, 192, 192, 0.15);
+}
+
+.silver-accordion .accordion-button:not(.collapsed) {
+  background: linear-gradient(120deg, rgba(192, 192, 192, 0.26), rgba(192, 192, 192, 0.12));
+  color: #fff;
+}
+
+.silver-accordion .list-group-item {
+  border: none;
+  border-radius: 0.5rem;
+  margin: 0.22rem 0;
+  color: var(--text-muted) !important;
+  transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.silver-accordion .list-group-item:hover {
+  background: rgba(192, 192, 192, 0.15) !important;
+  color: #fff !important;
+  transform: translateX(4px);
+}
+
+#adminOverviewChart {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.operations-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.ops-tile {
+  padding: 0.95rem 1rem;
+  border-radius: 0.95rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(192, 192, 192, 0.14);
+}
+
+.ops-tile span {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 0.35rem;
+}
+
+.ops-tile strong {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.status-line {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--text-muted);
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #71d08d;
+  box-shadow: 0 0 12px rgba(113, 208, 141, 0.55);
+}
+
+.endpoint-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.endpoint-card {
+  padding: 0.9rem 1rem;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(192, 192, 192, 0.14);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+}
+
+.endpoint-card h6 {
+  margin-bottom: 0.35rem;
+}
+
+.endpoint-card code {
+  display: block;
+  white-space: normal;
+  word-break: break-all;
+  color: #f0f0f0;
+}
+
+.admin-mini-table {
+  max-height: 280px;
+  overflow: auto;
+}
+
+/* Panel nav active state */
+[data-panel].active {
+  background: rgba(192, 192, 192, 0.12) !important;
+  color: var(--silver-strong) !important;
+  border-left: 3px solid var(--silver);
+}
+
+#storeItems .store-item {
+  border: 1px solid var(--border-soft);
+  padding: 0.8rem;
+  border-radius: 0.8rem;
+  background: rgba(22, 22, 22, 0.9);
+}
+
+.fade-in-up {
+  animation: fadeInUp 420ms ease forwards;
+}
+
+.card-pop {
+  animation: cardPop 500ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+}
+
+@keyframes cardPop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 991px) {
+  .admin-sidebar {
+    position: static;
+    top: 0;
+  }
+
+  .operations-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Nav active link ──────────────────────────────────────────────────────── */
+.navbar .nav-link.active {
+  color: var(--silver-strong) !important;
+  position: relative;
+}
+
+.navbar .nav-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--silver);
+  border-radius: 2px;
+}
+
+.nav-link-admin {
+  color: #f87171 !important;
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────────── */
+.site-footer {
+  border-top: 1px solid var(--border-soft);
+  padding: 2.5rem 0 1.5rem;
+  background: rgba(8, 8, 8, 0.6);
+  margin-top: 4rem;
+}
+
+.footer-link,
+.site-footer a {
+  color: #a0a0b0 !important;
+  text-decoration: none !important;
+  display: inline-block;
+  margin-bottom: 0.3rem;
+  transition: color 160ms ease;
+}
+
+.footer-link:hover,
+.site-footer a:hover {
+  color: var(--silver-strong) !important;
+}
+
+/* ── Landing page ──────────────────────────────────────────────────────── */
+.hero-section {
+  min-height: 78vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 1rem 4rem;
+  background:
+    radial-gradient(ellipse at 50% 120%, rgba(192, 192, 192, 0.07) 0%, transparent 60%),
+    radial-gradient(circle at 70% 20%, rgba(255, 255, 255, 0.04), transparent 30%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.text-silver {
+  color: var(--silver) !important;
+}
+
+.feature-card {
+  background: linear-gradient(180deg, rgba(38, 38, 42, 0.95), rgba(22, 22, 26, 0.98));
+  border: 1px solid rgba(192, 192, 192, 0.28);
+  border-radius: 1rem;
+  transition: transform 240ms ease, box-shadow 240ms ease;
+}
+
+.feature-card p {
+  color: #c8c8d0;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+}
+
+.feature-icon {
+  font-size: 2.2rem;
+  color: var(--silver);
+  display: block;
+}
+
+.connect-badge {
+  background: linear-gradient(180deg, rgba(32, 32, 32, 0.8), rgba(16, 16, 16, 0.95));
+  border: 1px solid var(--border-soft);
+  border-radius: 1rem;
+}
+
+.connect-steps li {
+  color: #c8c8d0;
+  line-height: 1.7;
+}
+
+.discord-cta {
+  background: linear-gradient(135deg, rgba(88, 101, 242, 0.18), rgba(88, 101, 242, 0.05));
+  border: 1px solid rgba(88, 101, 242, 0.45);
+  border-radius: 1.5rem;
+}
+
+.discord-cta p {
+  color: #c8c8d0;
+}
+
+.btn-discord {
+  background: #5865f2;
+  color: #fff;
+  border: 0;
+}
+
+.btn-discord:hover {
+  background: #4752c4;
+  color: #fff;
+}
+
+.btn-outline-silver {
+  border: 1px solid var(--silver);
+  color: var(--silver);
+  background: transparent;
+}
+
+.btn-outline-silver:hover {
+  background: var(--silver);
+  color: #111;
+}
+
+/* ── Utility colors ────────────────────────────────────────────────────── */
+.bg-silver-subtle {
+  background-color: rgba(192, 192, 192, 0.15) !important;
+}
+
+/* ── Dashboard profile ─────────────────────────────────────────────────── */
+.avatar-circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(192, 192, 192, 0.3), rgba(80, 80, 80, 0.5));
+  border: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--silver);
+  flex-shrink: 0;
+}
+
+/* ── Store page ──────────────────────────────────────────────────────────── */
+.store-item-card {
+  background: linear-gradient(180deg, rgba(28, 28, 28, 0.9), rgba(14, 14, 14, 0.95));
+  border: 1px solid var(--border-soft);
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 200ms ease, transform 200ms ease;
+}
+
+.store-item-card:hover {
+  border-color: rgba(192, 192, 192, 0.45);
+  transform: translateY(-2px);
+}
+
+.item-name {
+  color: var(--text-main);
+}
+
+.item-price {
+  color: var(--silver);
+}
+
+.topup-package-card {
+  background: linear-gradient(160deg, rgba(192, 192, 192, 0.08), rgba(20, 20, 20, 0.95));
+  border: 1px solid rgba(192, 192, 192, 0.25);
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: border-color 200ms ease, transform 200ms ease;
+}
+
+.topup-package-card:hover {
+  border-color: var(--silver);
+  transform: translateY(-3px);
+}
+
+.pkg-amount {
+  font-family: "Rajdhani", sans-serif;
+}
+
+/* ── Linked Accounts (Dashboard) ─────────────────────────────────────────── */
+.linked-account-row {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(192, 192, 192, 0.12);
+  border-left: 3px solid rgba(192, 192, 192, 0.25);
+  transition: border-color 200ms ease;
+}
+
+.linked-account-row.discord-row {
+  border-left-color: #5865f2;
+}
+
+.linked-account-row.fivem-row {
+  border-left-color: #f59e0b;
+}
+
+.linked-account-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.linked-account-icon.discord-icon {
+  background: rgba(88, 101, 242, 0.15);
+  color: #7289da;
+}
+
+.linked-account-icon.fivem-icon {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.linked-how-to {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ── Admin table enhancements ──────────────────────────────────────────────── */
+.admin-table thead th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(192, 192, 192, 0.18);
+  white-space: nowrap;
+}
+
+.admin-table tbody tr {
+  transition: background-color 120ms ease;
+}
+
+.admin-table tbody tr:hover {
+  background: rgba(192, 192, 192, 0.05);
+}
+
+/* ── Creator tabs ──────────────────────────────────────────────────────────── */
+#creatorTabs .nav-link {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(192, 192, 192, 0.15);
+  color: var(--text-muted);
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.9rem;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+#creatorTabs .nav-link.active {
+  background: linear-gradient(120deg, rgba(192, 192, 192, 0.26), rgba(192, 192, 192, 0.12));
+  color: #fff;
+  border-color: rgba(192, 192, 192, 0.35);
+}
+
+/* ── Bulk action bar ───────────────────────────────────────────────────────── */
+#usersBulkBar {
+  animation: fadeInUp 160ms ease both;
+}
+
+/* -----------------------------------------------------------------------
+   LANDING PAGE ENHANCEMENTS (v9)
+   ----------------------------------------------------------------------- */
+
+/* -- Hero stat badges ------------------------------------------------ */
+.hero-stat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(192,192,192,0.18);
+  border-radius: 2rem;
+  padding: 0.3rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  backdrop-filter: blur(4px);
+}
+.hero-stat-label {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Server status dot */
+.hero-stat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  display: inline-block;
+  flex-shrink: 0;
+}
+.hero-stat-dot.dot-online {
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+  animation: pulse-green 2s ease-in-out infinite;
+}
+.hero-stat-dot.dot-offline {
+  background: #ef4444;
+  box-shadow: 0 0 6px #ef4444;
+}
+
+@keyframes pulse-green {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.55; }
+}
+
+/* Connect strip below hero CTAs */
+.hero-connect-strip {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(192,192,192,0.15);
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+/* -- Section overline labels --------------------------------------- */
+.overline {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--silver);
+  margin-bottom: 0.25rem;
+}
+
+/* -- Faction cards ------------------------------------------------- */
+.faction-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(192,192,192,0.1);
+  border-radius: 0.875rem;
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+.faction-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(192,192,192,0.3);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+}
+.faction-icon {
+  line-height: 1;
+}
+
+/* -- How-to-join step cards ---------------------------------------- */
+.join-step-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(192,192,192,0.1);
+  border-radius: 0.875rem;
+  position: relative;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+.join-step-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+}
+.join-step-number {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 28px;
+  background: var(--silver);
+  color: #000;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+/* -- Gallery grid -------------------------------------------------- */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 200px;
+  gap: 0.75rem;
+}
+.gallery-tile {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: var(--card-bg);
+  border: 1px solid rgba(192,192,192,0.08);
+}
+.gallery-tile--wide {
+  grid-column: span 2;
+}
+.gallery-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 300ms ease;
+}
+.gallery-tile:hover img {
+  transform: scale(1.04);
+}
+.gallery-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  background: linear-gradient(135deg, rgba(192,192,192,0.04), rgba(192,192,192,0.01));
+}
+.gallery-placeholder i {
+  font-size: 1.6rem;
+  color: rgba(192,192,192,0.3);
+}
+
+@media (max-width: 767.98px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 150px;
+  }
+  .gallery-tile--wide {
+    grid-column: span 2;
+  }
+}
+
+/* -- Discord CTA (revamped) ---------------------------------------- */
+.discord-cta {
+  background: linear-gradient(135deg, rgba(88,101,242,0.18), rgba(88,101,242,0.06));
+  border: 1px solid rgba(88,101,242,0.3);
+  border-radius: 1rem;
+}
+
+/* -- Footer social icon buttons ------------------------------------ */
+.footer-socials .footer-social-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text-muted);
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+.footer-socials .footer-social-btn:hover {
+  background: rgba(192,192,192,0.15);
+  color: #fff;
+  border-color: rgba(192,192,192,0.35);
+}
